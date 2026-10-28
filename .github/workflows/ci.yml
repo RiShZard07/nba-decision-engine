@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-and-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Unit tests (offline, synthetic data)
+        run: pytest -q
+      - name: Regression gate
+        # Exits nonzero unless the chosen uplift policy beats the logging policy
+        # on simulator truth, the DR interval covers the truth, every budget,
+        # contact and eligibility constraint held, and the bandit regret curve
+        # passes the documented sublinearity test.
+        run: python -m nba demo --check
