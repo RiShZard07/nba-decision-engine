@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Unit tests (offline, synthetic data)
-        run: pytest -q
+        run: python -m pytest -q
       - name: Regression gate
         # Exits nonzero unless the chosen uplift policy beats the logging policy
         # on simulator truth, the DR interval covers the truth, every budget,
